@@ -1,9 +1,9 @@
-import 'package:draivi/Components/Login/LoginComponent.dart';
+import 'package:draivi/Components/Register/RegisterComponent.dart';
 import 'package:draivi/size_config.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreens extends StatelessWidget {
-  static String routeName = "/sign_in";
+class RegisterScreens extends StatelessWidget {
+  static String routeName = "/sign_up";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -12,7 +12,7 @@ class LoginScreens extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false, //menghilangakn back button
       ),
-      body: LoginComponent(),
+      body: RegisterComponent(),
     );
   }
 }

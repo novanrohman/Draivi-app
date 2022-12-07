@@ -1,24 +1,27 @@
 import 'package:draivi/Components/custom_surfix_icon.dart';
 import 'package:draivi/Components/default_button_custome_color.dart';
-import 'package:draivi/Screens/Register/Registrasi.dart';
+import 'package:draivi/Screens/Login/LoginScreens.dart';
 import 'package:draivi/size_config.dart';
 import 'package:draivi/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SignInform extends StatefulWidget {
+class SignUpform extends StatefulWidget {
   @override
-  _SignInForm createState() => _SignInForm();
+  _SignUpForm createState() => _SignUpForm();
 }
 
-class _SignInForm extends State<SignInform> {
+class _SignUpForm extends State<SignUpform> {
   final _formKey = GlobalKey<FormState>();
+  String? username;
   String? email;
   String? password;
-  bool? remember = false;
+  String? repassword;
 
-  TextEditingController txtUseEmail = TextEditingController(),
-      txtPassword = TextEditingController();
+  TextEditingController txtUseUsername = TextEditingController(),
+      txtUseEmail = TextEditingController(),
+      txtPassword = TextEditingController(),
+      txtrePassword = TextEditingController();
 
   FocusNode focusNode = new FocusNode();
 
@@ -27,33 +30,17 @@ class _SignInForm extends State<SignInform> {
     return Form(
       child: Column(
         children: [
+          buildUsername(),
+          SizedBox(height: getProportionateScreenHeight(30)),
           buildEmail(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPassword(),
           SizedBox(height: getProportionateScreenHeight(30)),
-          Row(
-            children: [
-              Checkbox(
-                  value: remember,
-                  onChanged: (value) {
-                    setState(() {
-                      remember = value;
-                    });
-                  }),
-              Text('Tetap masuk'),
-              Spacer(),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  "Lupa Password",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              )
-            ],
-          ),
+          buildrePassword(),
+          SizedBox(height: getProportionateScreenHeight(30)),
           DefaultButtonCustomeColor(
             color: kPrimaryColor,
-            text: "Masuk",
+            text: "Buat Akun",
             press: () {},
           ),
           SizedBox(
@@ -61,15 +48,31 @@ class _SignInForm extends State<SignInform> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, RegisterScreens.routeName);
+              Navigator.pushNamed(context, LoginScreens.routeName);
             },
             child: Text(
-              "Belum punya akun? Daftar disini",
+              "Sudah punya akun? Login disini",
               style: TextStyle(decoration: TextDecoration.underline),
             ),
           )
         ],
       ),
+    );
+  }
+
+  TextFormField buildUsername() {
+    return TextFormField(
+      controller: txtUseUsername,
+      keyboardType: TextInputType.text,
+      style: mTitleStyle,
+      decoration: InputDecoration(
+          hintText: 'Masukkan Username anda',
+          labelStyle: TextStyle(
+              color: focusNode.hasFocus ? mSubtitleColor : kPrimaryColor),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: CustomSurffixIcon(
+            svgIcon: "assets/icons/User.svg",
+          )),
     );
   }
 
@@ -92,6 +95,22 @@ class _SignInForm extends State<SignInform> {
   TextFormField buildPassword() {
     return TextFormField(
       controller: txtPassword,
+      obscureText: true,
+      style: mTitleStyle,
+      decoration: InputDecoration(
+          hintText: 'Masukkan password anda',
+          labelStyle: TextStyle(
+              color: focusNode.hasFocus ? mSubtitleColor : kPrimaryColor),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: CustomSurffixIcon(
+            svgIcon: "assets/icons/Lock.svg",
+          )),
+    );
+  }
+
+  TextFormField buildrePassword() {
+    return TextFormField(
+      controller: txtrePassword,
       obscureText: true,
       style: mTitleStyle,
       decoration: InputDecoration(
