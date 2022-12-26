@@ -87,6 +87,9 @@ var mTitleStyle = GoogleFonts.inter(
 var mTitleStyleColorWhite = GoogleFonts.inter(
     fontWeight: FontWeight.w600, color: mFillColor, fontSize: 12);
 
+var mTitleStyleColorWhite20 = GoogleFonts.inter(
+    fontWeight: FontWeight.w600, color: mFillColor, fontSize: 20);
+
 var mTitleStyle16 = GoogleFonts.inter(
     fontWeight: FontWeight.w600, color: mTitleColor, fontSize: 16);
 
@@ -137,6 +140,18 @@ var mServiceSubtitleStyle12 = GoogleFonts.inter(
 
 var mServiceSeeAll = GoogleFonts.inter(
     fontWeight: FontWeight.w400, fontSize: 12, color: mSubtitleColor);
+
+var mMainHeading = GoogleFonts.inter(
+    fontWeight: FontWeight.bold, fontSize: 30, color: mTitleColor);
+
+var mSubHeading = GoogleFonts.inter(
+    fontWeight: FontWeight.bold, fontSize: 25, color: mTitleColor);
+
+var mBasicHeading = GoogleFonts.inter(fontSize: 20, color: mTitleColor);
+
+const MainHeading = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
+const SubHeading = TextStyle(fontWeight: FontWeight.bold, fontSize: 25);
+const BasicHeading = TextStyle(fontSize: 20);
 
 // Style for Popular Destination Section
 var mPopularDestinationTitleStyle = GoogleFonts.inter(
