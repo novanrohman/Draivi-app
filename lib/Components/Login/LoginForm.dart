@@ -1,10 +1,19 @@
+import 'dart:convert';
+import 'dart:html';
+import 'dart:io';
+
 import 'package:draivi/Components/custom_surfix_icon.dart';
 import 'package:draivi/Components/default_button_custome_color.dart';
+import 'package:draivi/Screens/Home/HomeScreens.dart';
 import 'package:draivi/Screens/Register/Registrasi.dart';
 import 'package:draivi/size_config.dart';
 import 'package:draivi/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart';
 
 class SignInform extends StatefulWidget {
   @override
@@ -17,8 +26,72 @@ class _SignInForm extends State<SignInform> {
   String? password;
   bool? remember = false;
 
-  TextEditingController txtUseEmail = TextEditingController(),
-      txtPassword = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool visible = false;
+  final String sUrl = "https://127.0.0.1:8000/api/";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _cekLogin(String email, password) async {
+    setState(() {
+      visible = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+
+    try {
+      Response response = await post(
+          Uri.parse('http://127.0.0.1:8000/api/login'),
+          body: {'email': email, 'password': password});
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        print("data sukses");
+        Navigator.of(context)
+            .push(MaterialPageRoute(
+          builder: (context) => HomeScreens(),
+        ))
+            .then((value) {
+          setState() {}
+        });
+      } else if (response.statusCode == 401) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Oops...',
+          text: 'Maaf, Email atau Password yang anda masukkan salah',
+        );
+      } else {
+        print("data Errror");
+      }
+    } catch (e) {
+      print("errror");
+    }
+  }
+
+  // _showAlertDialog(BuildContext context, String err) {
+  //   Widget okButton = FloatingActionButton(
+  //     child: Text("OK"),
+  //     onPressed: () => Navigator.pop(context),
+  //   );
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text("Error"),
+  //     content: Text(err),
+  //     actions: [
+  //       okButton,
+  //     ],
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   FocusNode focusNode = new FocusNode();
 
@@ -27,34 +100,34 @@ class _SignInForm extends State<SignInform> {
     return Form(
       child: Column(
         children: [
-          buildEmail(),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          buildPassword(),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          Row(
-            children: [
-              Checkbox(
-                  value: remember,
-                  onChanged: (value) {
-                    setState(() {
-                      remember = value;
-                    });
-                  }),
-              Text('Tetap masuk'),
-              Spacer(),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  "Lupa Password",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              )
-            ],
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(hintText: 'Email'),
           ),
-          DefaultButtonCustomeColor(
-            color: kPrimaryColor,
-            text: "Masuk",
-            press: () {},
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: passwordController,
+            decoration: InputDecoration(hintText: 'Password'),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          GestureDetector(
+            onTap: () {
+              _cekLogin(emailController.text.toString(),
+                  passwordController.text.toString());
+            },
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: Text('Login'),
+              ),
+            ),
           ),
           SizedBox(
             height: 20,
@@ -75,7 +148,7 @@ class _SignInForm extends State<SignInform> {
 
   TextFormField buildEmail() {
     return TextFormField(
-      controller: txtUseEmail,
+      controller: emailController,
       keyboardType: TextInputType.text,
       style: mTitleStyle,
       decoration: InputDecoration(
@@ -91,7 +164,7 @@ class _SignInForm extends State<SignInform> {
 
   TextFormField buildPassword() {
     return TextFormField(
-      controller: txtPassword,
+      controller: passwordController,
       obscureText: true,
       style: mTitleStyle,
       decoration: InputDecoration(
